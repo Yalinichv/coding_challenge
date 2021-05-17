@@ -1,70 +1,68 @@
-# Getting Started with Create React App
+Task description.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+We prepared a small coding challenge which is divided into 3 parts. You can use any libs and/or frameworks.
 
-## Available Scripts
+Please take two to three hours to work your way through the exercises and complete them as good as you can – we don’t expect you to finish it. However we would like to see your ideas about the different approaches through comments or email.
 
-In the project directory, you can run:
+You have HTML markup
+"<div contenteditable="true"><del>deleted</del> accepted <ins>inserted</ins></div>"
 
-### `yarn start`
+Part 0 CSS styles
+a. add css styles to make "deleted" text red and "inserted" green
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Part 1 Hide / Unhide <del> tags when editing
+a. When clicking inside the ContentEditable, words which are inside <del> tags are hidden
+b. When clicking back out of the ContentEditable redisplay the words inside the <del> tags
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Part 2 Newly added words receive an <ins> tag
+a. When adding new words inside the ContentEditable, each new word should receive an <ins> tag. E.g. the input text "some new text" will convert to <ins>some</ins> <ins>new</ins> <ins>text</ins>
 
-### `yarn test`
+Part 3 A tag can only contain a single word (no whitespace allowed)
+a. When whitespace is introduced inside an <ins> tag, split the tag into two distinct <ins> tags. E.g <ins>test</ins> will become <ins>te st</ins> on edit and has to be converted to <ins>te</ins> <ins>st</ins>
+b. When adding a word in front of an <ins> tag, combine them as long there is no whitespace between them. E.g new<ins>test</ins> will become <ins>newtest</ins>
+c. When adding a word behind an <ins> tag, combine them as long there is no whitespace between them. E.g <ins>test</ins>new will become <ins>testnew</ins>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Решения и мои мысли=)
 
-### `yarn build`
+Пункт 0.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Это сделайть все через стили CSS, как я и сделал
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Задать тегам стили:
+del {
+color: red;
+}
+Теперь текст в тэге <del> будет красный
+ins {
+color: green;
+}
+Теперь текст в тэге <ins> будет зеленый
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Пункт 1.
 
-### `yarn eject`
+1. При фокусе задаем <del> свойство:
+.contentEditableDiv:focus del {
+display: none;
+}
+Терерь <del> будет исчезать.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+2. Еще можно наипсать функцию переключатель и передавать ей true, false с помощью локального состояние React.useState() и события onClick. Как пример вот єта функция:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+const [toggle, setToggle] = useState(false)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+const showAndHideDel = (bool)=>{
+setToggle(bool)
+}
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+и с помощью логического оператора И показывать или не показывать тэг <del>
 
-## Learn More
+{toggle && <del>delete</del>}
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Пункт 2-3.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Это уже сложнее и интереснее, какие у меня были мысли, первая мысль у меня сделать с помощью регулярных выражений, например найти строку у которой будут с двух сторон пробелы и заменить их с помощью метода replace на <ins> sometext</ins>,
+еще можно строку разбить на массив и каждый элемент массива завернуть в ins и сформировать строку и вывести ее, еще можно было каждый элемент завернуть в реактовский компонент и внутри компонента отслеживать пробел внутри строки, если есть пробел разделять компонент на несколько тэгов <ins>. Но у меня повились проблемы с перемещение курсора.
+Но мою голову не покидала мысль что тут должно быть все легче и проще, и я подумал что наверно, есть способ как-то отследить вводимые символы в поле и зависимо от них добалять или не добалять к ним тэг ins.
+И начал гуглить и нашел статью про window.getSelector() и решил попробовать управлять кареткой и добавлять узлы ноды при определенном веденном символе и вот что получилось)
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Задание интересное узнал много нового)
